@@ -1129,16 +1129,55 @@ virsh send-key 1 0x41
 
 ### Nomad Operations
 
-* Create job
-* Validate job
-* Run job
-* Web UI
-    * View job status
-    * View job logs
+[https://learn.hashicorp.com/tutorials/nomad/get-started-jobs?in=nomad/get-started]
+
+Create job
+
+`nomad job init` (produces example file)
+
+Run job
+
+`nomad job run <NOMAD JOB FILE>`
 
 ### Firecracker
 
-* Create VM
+[https://github.com/firecracker-microvm/firecracker/blob/master/docs/getting-started.md]
+
+[https://github.com/bkleiner/ubuntu-firecracker]
+
+[https://medium.com/@s8sg/quick-start-with-firecracker-and-firectl-in-ubuntu-f58aeedae04b]
+
+#### install
+
+* golang must be installed 
+
+`wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local`
+
+set `export PATH=$PATH:/usr/local/go/bin` in `/etc/profile`
+
+```sh
+release_url="https://github.com/firecracker-microvm/firecracker/releases"
+latest=$(basename $(curl -fsSLI -o /dev/null -w  %{url_effective} ${release_url}/latest))
+arch=`uname -m`
+curl -L ${release_url}/download/${latest}/firecracker-${latest}-${arch}.tgz \
+| tar -xz
+cd release-${latest}
+sudo cp firecracker-${latest}-${arch} /usr/bin/firecracker
+sudo setfacl -m u:${USER}:rw /dev/kvm
+git clone https://github.com/firecracker-microvm/firectl
+cd firectl
+make
+sudo crp firectl /usr/bin/
+```
+
+#### Create Firecracker VM with Ubuntu kernel and filesystem
+
+```sh
+git clone https://github.com/bkleiner/ubuntu-firecracker.git
+cd ubuntu-firecracker
+docker built -t ubuntu-firecracker .
+docker run --privileged -it --rm -v $(pwd)/output:/output ubuntu-firecracker
+```
 
 ## Example Files
 

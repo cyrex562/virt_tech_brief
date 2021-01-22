@@ -1,0 +1,61 @@
+{
+    "builders": [
+        {
+            "accelerator": "kvm",
+            "boot_command": [
+                "<enter><wait><enter><wait><f6><esc><wait> ",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs>",
+                "/casper/vmlinuz ",
+                "root=/dev/sr0 ",
+                "initrd=/casper/initrd ",
+                "autoinstall ip=dhcp ds=nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/",
+                "<enter><wait>"
+            ],
+            "boot_wait": "3s",
+            "communicator": "ssh",
+            "cpus": "2",
+            "disk_interface": "virtio",
+            "disk_size": "100G",
+            "format": "qcow2",
+            "http_directory": "http",
+            "iso_checksum": "sha256:443511f6bf12402c12503733059269a2e10dec602916c0a75263e5d990f6bb93",
+            "iso_urls": [
+                "iso/ubuntu-20.04.1-live-server-amd64.iso",
+                "https://mirror.umd.edu/ubuntu-iso/20.04.1/ubuntu-20.04.1-live-server-amd64.iso"
+            ],
+            "memory": "4096",
+            "vm_name": "ubuntu-2004",
+            "net_device": "virtio-net",
+            "net_bridge": "br2551",
+            "output_directory": "output/live-server",
+            "shutdown_command": "echo 'box-admin' | sudo -s shutdown -P now",
+            "ssh_handshake_attempts": 100,
+            "ssh_password": "stern-codex",
+            "ssh_pty": true,
+            "ssh_timeout": "20m",
+            "ssh_username": "box-admin",
+            "type": "qemu",
+            "use_default_display": true,
+            "display": "none",
+            "headless": true
+        }
+    ],
+    "provisioners": [
+    ],
+    "post-processors": [
+        {
+            "type": "manifest",
+            "output": "output/manifest.json",
+            "strip_path": true,
+            "custom_data": {}
+        }
+    ]
+}
